@@ -1,4 +1,4 @@
-package com.senzer.mylove;
+package com.senzer.mylove.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -28,6 +28,9 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.senzer.mylove.R;
+import com.senzer.mylove.util.ToastHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,7 +89,34 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+//                attemptLogin();
+
+                String email = mEmailView.getText().toString();
+                String password = mPasswordView.getText().toString();
+                String name = getString(R.string.name);
+                String pwd = getString(R.string.pwd);
+
+                if (TextUtils.isEmpty(email)) {
+                    ToastHelper.toast(LoginActivity.this, "请输入用户名！");
+                    return;
+                }
+
+                if (TextUtils.isEmpty(password)) {
+                    ToastHelper.toast(LoginActivity.this, "请输入密码！");
+                    return;
+                }
+
+                if (name.equals(email)) {
+                    ToastHelper.toast(LoginActivity.this, "无此用户！");
+                    return;
+                }
+
+                if (pwd.equals(password)) {
+                    ToastHelper.toast(LoginActivity.this, "密码错误！");
+                    return;
+                }
+
+
             }
         });
 

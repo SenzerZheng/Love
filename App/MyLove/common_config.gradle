@@ -1,0 +1,29 @@
+project.ext {
+
+    // Java相关配置
+    javaVersion = 8
+    javaMaxHeapSize = "4G"
+
+    // Android编译版本相关
+    compileSdkVersion = 25
+    buildToolsVersion = '25.0.0'
+    minSdkVersion = 15
+    targetSdkVersion = 25
+
+    // JDK版本兼容
+    targetCompatibility = this.getJavaVersion()
+    sourceCompatibility = this.getJavaVersion()
+}
+
+def getJavaVersion() {
+    switch (project.ext.javaVersion) {
+        case 6:
+            return JavaVersion.VERSION_1_6;
+
+        case 7:
+            return JavaVersion.VERSION_1_7;
+
+        case 8:
+            return JavaVersion.VERSION_1_8;
+    }
+}

@@ -1,30 +1,152 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    compileSdkVersion project.ext.compileSdkVersion
+    buildToolsVersion project.ext.buildToolsVersion
+
     defaultConfig {
         applicationId "com.senzer.mylove"
-        minSdkVersion 15
-        targetSdkVersion 25
+        minSdkVersion project.ext.minSdkVersion
+        targetSdkVersion project.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+        // dex突破65535的限制
+        multiDexEnabled true
+
+        // 设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
+        ndk {
+            abiFilters "armeabi"
+//            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "arm64-v8a", "x86_64"
+        }
+
+        // add the compatibility of the java_1.8; jack: java android compiler kit
+        jackOptions {
+            enabled true
         }
     }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/LGPL2.1'
+        exclude '.README'
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
+
+    sourceSets {
+        main {
+            // 让AS识别libs下的.so第三方包
+//            jniLibs.srcDirs = ['libs']
+        }
+
+        debug.setRoot('build-types/debug')
+        alpha.setRoot('build-types/debug')
+        release.setRoot('build-types/release')
+    }
+
+    signingConfigs {
+        debug {
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+            storeFile file('./sr_debug.keystore')
+            storePassword "android"
+        }
+
+        release {
+            keyAlias "kpkey"
+            keyPassword "1q2w3e4r"
+            storeFile file('./sr_release.keystore')
+            storePassword "1q2w3e4r"
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            zipAlignEnabled false
+
+            // 移除无用的resource文件
+            shrinkResources false
+            signingConfig signingConfigs.debug
+        }
+
+        debugRel {
+            minifyEnabled false
+            zipAlignEnabled false
+
+            // 移除无用的resource文件
+            shrinkResources false
+            signingConfig signingConfigs.debug
+        }
+
+        release {
+            // 是否混淆
+            minifyEnabled true
+
+            // zip优化
+            zipAlignEnabled true
+
+            // 移除无用的resource文件
+            shrinkResources true
+
+            signingConfig signingConfigs.release
+
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        def fileName = "MyLove_v${defaultConfig.versionName}_${variant.productFlavors[0].name}.apk"
+                        output.outputFile = new File(outputFile.parent, fileName)
+                    }
+                }
+            }
+        }
+    }
+
+    productFlavors {
+        myang {}
+    }
+
+    productFlavors.all {
+        flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    // 65536的方法限制分包处理
+    dexOptions {
+        // 加快编译速度
+//        incremental true
+        javaMaxHeapSize "4G"
+    }
+
+    compileOptions {
+        targetCompatibility project.ext.targetCompatibility
+        sourceCompatibility project.ext.sourceCompatibility
+    }
+}
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support:design:25.2.0'
-    testCompile 'junit:junit:4.12'
+
+    // 高德地图
+    compile 'com.amap.api:location:latest.integration'
 }
