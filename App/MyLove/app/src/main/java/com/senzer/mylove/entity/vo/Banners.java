@@ -1,6 +1,8 @@
 package com.senzer.mylove.entity.vo;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 import lombok.Data;
@@ -16,14 +18,32 @@ import lombok.Data;
  * created at: 2017/7/10 18:07
  */
 @Data
-public class Banners implements Serializable {
+public class Banners implements Parcelable {
     private List<BannerEntity> banners;         // Banners链接
 
-    @Data
-    public class BannerEntity implements Serializable {
-        private String id;                      // Banner的唯一标识
-        private String title;                   // Banner的标题
-        private String cover;                   // Banner的封面图
-        private String detailsUrl;              // Banner的详情H5页面
+    protected Banners(Parcel in) {
+        banners = in.createTypedArrayList(BannerEntity.CREATOR);
+    }
+
+    public static final Creator<Banners> CREATOR = new Creator<Banners>() {
+        @Override
+        public Banners createFromParcel(Parcel in) {
+            return new Banners(in);
+        }
+
+        @Override
+        public Banners[] newArray(int size) {
+            return new Banners[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(banners);
     }
 }
