@@ -143,10 +143,31 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile project(':banner')
 
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support:design:25.2.0'
-
+    // network
+    compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
+    compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
+    compile 'com.squareup.retrofit:adapter-rxjava:2.0.0-beta2'
+    // 正式打包注释掉（只适用于DEBUG 拦截Retrofit POST 请求Body Log）
+    compile 'com.squareup.okhttp:logging-interceptor:2.6.0'
+    // injecting
+    compile 'com.jakewharton:butterknife:7.0.1'
+    // 1. 以下两个库，在使用minSdkVersion < 21 版本（5.0以下）时，系统自动生成。
+    // 2. 如果minSdkVersion >= 21 版本（5.0 及以上）时，则需要添加下面两句话，防止报错。
+    // 原理：
+    // 1. 最小SDK版本是5.0以下，无自动分包能力，所以根据根据 multiDexEnabled true判断是否自动生成，以下两个库。
+    // 2. 当最小SDK版本为5.0以上，具有自动分包能力，所以无需自动生成以下两个库。
+    // 3. 为了使用instanRun，防止编译出错，所以加上以下两句话。
+    compile 'com.android.support:multidex:1.0.1'
+    // for gradle below 1.1
+    compile 'com.android.support:multidex-instrumentation:1.0.1'
     // 高德地图
     compile 'com.amap.api:location:latest.integration'
+    // lombok(getter and setter)
+    compile 'org.projectlombok:lombok:1.16.8'
+    // 图片显示处理
+    compile 'com.github.bumptech.glide:glide:3.6.1'
 }
