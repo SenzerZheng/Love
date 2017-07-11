@@ -4,7 +4,7 @@ import android.content.Context;
 import android.widget.ImageView;
 
 import com.senzer.mylove.R;
-import com.senzer.mylove.entity.vo.Banners;
+import com.senzer.mylove.entity.vo.BannerEntity;
 import com.youth.banner.loader.ImageLoader;
 
 
@@ -22,7 +22,7 @@ public class GlideImageLoader extends ImageLoader {
 
     @Override
     public void displayImage(Context context, Object path, ImageView iv) {
-        Banners.BannerEntity data = (Banners.BannerEntity) path;
+        BannerEntity data = (BannerEntity) path;
         GlideUtils.loadImg(context, data.getCover(), iv, R.mipmap.place_holder);
     }
 }

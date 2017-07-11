@@ -1,7 +1,7 @@
 package com.senzer.mylove.api;
 
-import com.spider.lib.logger.SpiderLogger;
-import com.spider.reader.BuildConfig;
+import com.senzer.mylove.BuildConfig;
+import com.senzer.mylove.logger.SpiderLogger;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -10,8 +10,6 @@ import com.squareup.okhttp.logging.HttpLoggingInterceptor;
 
 import java.io.IOException;
 import java.util.WeakHashMap;
-
-import javax.net.ssl.SSLSocketFactory;
 
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
@@ -82,14 +80,14 @@ public class RetrofitManager {
             // online ev:
             // 1. http://passporttest.spider.com.cn/
             // 2. http://passport.spider.com.cn/
-            if ((HttpUrls.BT_RELEASE.equals(BuildConfig.BUILD_TYPE)
-                    || HttpUrls.BT_DEBUG_REL.equals(BuildConfig.BUILD_TYPE))
-                    && HttpUrls.ACCOUNT_MGR_HOST.equalsIgnoreCase(baseUrl)) {
-                tempOkHttpClient = okHttpClient.clone();
-
-                SSLSocketFactory ssf = SSLContextFactory.getSSLSocketFactory();
-                tempOkHttpClient.setSslSocketFactory(ssf);
-            }
+//            if ((HttpUrls.BT_RELEASE.equals(BuildConfig.BUILD_TYPE)
+//                    || HttpUrls.BT_DEBUG_REL.equals(BuildConfig.BUILD_TYPE))
+//                    && HttpUrls.ACCOUNT_MGR_HOST.equalsIgnoreCase(baseUrl)) {
+//                tempOkHttpClient = okHttpClient.clone();
+//
+//                SSLSocketFactory ssf = SSLContextFactory.getSSLSocketFactory();
+//                tempOkHttpClient.setSslSocketFactory(ssf);
+//            }
 
             retrofit = new Retrofit.Builder()
                     .client(tempOkHttpClient)

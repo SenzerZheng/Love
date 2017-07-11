@@ -203,8 +203,6 @@ public class ParamsHelper {
         common.put("channel", RequestBody.create(MediaType.parse("text/plain"), tempChanner));      // 渠道，用户表存入sourcedesc字段中
         common.put("version", RequestBody.create(MediaType.parse("text/plain"), VERSION));          // 版本，当前版本 例如：v3.2.0
 
-        String token = AppContext.getInstance().getSpiderToken();
-
         common.put(TIME_STAMP, RequestBody.create(MediaType.parse("text/plain"), sTimeStamp));      // 时间戳
         common.put(RANDOM_CODE, RequestBody.create(MediaType.parse("text/plain"), sUUID));          // sUUID
     }

@@ -3,7 +3,7 @@ package com.senzer.mylove.api;
 
 import android.support.annotation.NonNull;
 
-import com.spider.reader.BuildConfig;
+import com.senzer.mylove.BuildConfig;
 
 /**
  * ProjectName: HttpUrls
@@ -58,43 +58,6 @@ public class HttpUrls {
     }
 
     /**
-     * 账户管理系统，服务器地址
-     */
-    public static final String ACCOUNT_MGR_HOST = getAccountMgrHost();
-
-    @NonNull
-    private static String getAccountMgrHost() {
-        if (BT_RELEASE.equalsIgnoreCase(BuildConfig.BUILD_TYPE)) {              // release(生产)
-            return "https://passport.spider.com.cn/";
-        } else if (BT_DEBUG_REL.equalsIgnoreCase(BuildConfig.BUILD_TYPE)) {     // debugRelease
-            return "https://passport.spider.com.cn/";
-//            return "http://passport.spider.com.cn/";
-        } else if (BT_ALPHA.equalsIgnoreCase(BuildConfig.BUILD_TYPE)) {         // alpha(preRelease)
-            return "http://passporttest.spider.com.cn/";
-        }
-
-//        return "http://192.168.1.234:8146/passport/";                           // debug(developer)
-        return "http://192.168.1.52:8146/";                           // debug(developer)
-//        return "https://passport.spider.com.cn/";                               // 张威
-//        return "http://192.168.1.126:8082/passport/";                           // 向明亨
-//        return "http://passporttest.spider.com.cn/";                            // 主要为了测试充值功能所加，之后去掉，使用234
-    }
-
-    // 支付宝或银联充值使用的接口地址（参考电影票），TODO:后期可能需要后台，优化到支付系统中
-    public static final String RECHARGE_HOST = getRechargeHost();
-
-    @NonNull
-    private static String getRechargeHost() {
-        if (BT_RELEASE.equalsIgnoreCase(BuildConfig.BUILD_TYPE)) {              // release(生产)
-            return "http://m.spider.com.cn/";
-        } else if (BT_DEBUG_REL.equalsIgnoreCase(BuildConfig.BUILD_TYPE)) {     // debugRelease
-            return "http://m.spider.com.cn/";
-        }
-
-        return "http://mtest.spider.com.cn/";                                   // debug(developer)
-    }
-
-    /**
      * 服务器对应的版本号
      */
     // LOCAL_HOST
@@ -108,47 +71,6 @@ public class HttpUrls {
     public static final String APP_VER_ACCOUNT = "user/";                               // 服务器地址 - 账户控制器（账户管理系统）
     public static final String APP_VER_ACCOUNT_TPL = "user2/";                          // 服务器地址 - 账户控制器 - 第三方登录（账户管理系统）
     public static final String APP_PER_CENTER = "spiderPerCenter20/";                   // 服务器地址 - 个人中心（账户管理系统）
-
-    /**
-     * 使用H5时，第三方登录Wap站的拼接链接
-     *
-     * @Unused
-     */
-    public static final String WAP_LOGIN_URL = getWapLoginUrl();
-
-    @NonNull
-    private static String getWapLoginUrl() {
-        StringBuffer sbUrl = new StringBuffer();
-        // release: http://m.spider.com.cn/clientLogin.jsp?
-        // debug: http://test.spider.com.cn:8086/spiderwap/clientLogin.jsp?
-        sbUrl.append(LOCAL_HOST);
-        sbUrl.append("clientLogin.jsp?");
-
-        // release: goUrl=http://m.spider.com.cn/movie20/zydetail.html
-        // debug: goUrl=http://test.spider.com.cn:8086/spiderwap/movie20/zydetail.html
-        sbUrl.append("goUrl=");
-        sbUrl.append(LOCAL_HOST);
-        sbUrl.append("movie20/zydetail.html&hideSource=appsbt");
-        return sbUrl.toString();
-    }
-
-    /**
-     * TalkingData开关、版本检测（电影票接口）
-     *
-     * @Unused
-     */
-    public static final String FILM_URL = getFilmUrl();
-
-    @NonNull
-    private static String getFilmUrl() {
-        if (BT_RELEASE.equalsIgnoreCase(BuildConfig.BUILD_TYPE)) {          // release(生产)
-            return "http://film.spider.com.cn/huayins/";
-        } else if (BT_DEBUG_REL.equalsIgnoreCase(BuildConfig.BUILD_TYPE)) { // debugRelease
-            return "http://film.spider.com.cn/huayins/";
-        }
-
-        return "http://filmtest.spider.com.cn/huayins/";                    // debug(developer)
-    }
 
     // ------------------ 接口名 -----------------
     // ----- 登录注册 -----

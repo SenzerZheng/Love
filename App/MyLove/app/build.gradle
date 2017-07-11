@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion project.ext.compileSdkVersion
@@ -8,8 +9,8 @@ android {
         applicationId "com.senzer.mylove"
         minSdkVersion project.ext.minSdkVersion
         targetSdkVersion project.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 100
+        versionName "1.0.0"
 
         // dex突破65535的限制
         multiDexEnabled true
@@ -18,11 +19,6 @@ android {
         ndk {
             abiFilters "armeabi"
 //            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "arm64-v8a", "x86_64"
-        }
-
-        // add the compatibility of the java_1.8; jack: java android compiler kit
-        jackOptions {
-            enabled true
         }
     }
 
@@ -55,29 +51,20 @@ android {
         debug {
             keyAlias "androiddebugkey"
             keyPassword "android"
-            storeFile file('./sr_debug.keystore')
+            storeFile file('./jey_debug.keystore')
             storePassword "android"
         }
 
         release {
             keyAlias "kpkey"
-            keyPassword "1q2w3e4r"
-            storeFile file('./sr_release.keystore')
-            storePassword "1q2w3e4r"
+            keyPassword "zhxjie52888825"
+            storeFile file('./jey_release.keystore')
+            storePassword "zhxjie52888825"
         }
     }
 
     buildTypes {
         debug {
-            minifyEnabled false
-            zipAlignEnabled false
-
-            // 移除无用的resource文件
-            shrinkResources false
-            signingConfig signingConfigs.debug
-        }
-
-        debugRel {
             minifyEnabled false
             zipAlignEnabled false
 

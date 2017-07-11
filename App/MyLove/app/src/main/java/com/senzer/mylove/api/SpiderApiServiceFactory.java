@@ -1,8 +1,6 @@
 package com.senzer.mylove.api;
 
 
-import com.spider.reader.BuildConfig;
-
 import retrofit.Retrofit;
 
 /**
@@ -24,12 +22,8 @@ public class SpiderApiServiceFactory {
 
         SpiderApiService spiderApiService = null;
 
-        if (BuildConfig.mock) {
-            spiderApiService = new MockApiService();
-        } else {
-            Retrofit retrofit = RetrofitManager.get(url);
-            spiderApiService = retrofit.create(SpiderApiService.class);
-        }
+        Retrofit retrofit = RetrofitManager.get(url);
+        spiderApiService = retrofit.create(SpiderApiService.class);
 
         return spiderApiService;
     }

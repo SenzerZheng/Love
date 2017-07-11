@@ -3,21 +3,20 @@ package com.senzer.mylove.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
-
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -30,6 +29,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.senzer.mylove.R;
+import com.senzer.mylove.util.PermissionDetector;
 import com.senzer.mylove.util.ToastHelper;
 
 import java.util.ArrayList;
@@ -69,6 +69,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        PermissionDetector.verifyLocationPermissions(this);
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -106,17 +108,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     return;
                 }
 
-                if (name.equals(email)) {
+                if (!name.equals(email)) {
                     ToastHelper.toast(LoginActivity.this, "无此用户！");
                     return;
                 }
 
-                if (pwd.equals(password)) {
+                if (!pwd.equals(password)) {
                     ToastHelper.toast(LoginActivity.this, "密码错误！");
                     return;
                 }
 
-
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
             }
         });
 
@@ -308,7 +310,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mEmailView.setAdapter(adapter);
     }
-
 
     private interface ProfileQuery {
         String[] PROJECTION = {
