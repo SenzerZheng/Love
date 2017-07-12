@@ -1,5 +1,6 @@
 package com.senzer.mylove.api;
 
+import com.senzer.mylove.entity.dto.ReqLocation;
 import com.senzer.mylove.entity.vo.HeadUrl;
 import com.senzer.mylove.entity.vo.UserInfo;
 import com.squareup.okhttp.RequestBody;
@@ -7,6 +8,7 @@ import com.squareup.okhttp.RequestBody;
 import java.util.Map;
 
 import retrofit.Response;
+import retrofit.http.Body;
 import retrofit.http.FieldMap;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.Multipart;
@@ -37,6 +39,24 @@ public interface SpiderApiService {
     @POST(HttpUrls.USER_LOGIN)
     Observable<Response<DataResponse<UserInfo>>> userLogin(@FieldMap Map<String, String> param);
 
+    /**
+     * 更新定位信息，FROM表单提交
+     *
+     * @param param
+     * @return
+     */
+    @FormUrlEncoded
+    @POST(HttpUrls.UPDATE_LOCATION)
+    Observable<DataResponse> updateLocation(@FieldMap Map<String, String> param);
+
+    /**
+     * 更新定位信息，JSON格式提交
+     *
+     * @param param
+     * @return
+     */
+    @POST(HttpUrls.UPDATE_LOCATION_BY_JSON)
+    Observable<DataResponse> updateLocation(@Body ReqLocation reqLocation);
 
     /**
      * 设置用户头像

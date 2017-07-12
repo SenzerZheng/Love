@@ -134,6 +134,11 @@ dependencies {
 
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support:design:25.2.0'
+    // rx: reactive extensions
+    compile 'io.reactivex:rxandroid:1.1.0'
+    compile 'io.reactivex:rxjava:1.1.0'
+    compile 'com.trello:rxlifecycle:0.4.0'
+    compile 'com.trello:rxlifecycle-components:0.4.0'
     // network
     compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
     compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'

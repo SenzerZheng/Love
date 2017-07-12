@@ -290,4 +290,10 @@ public class ParamsHelper {
         return map;
     }
 
+    public static Map<String, String> updateLocationMap(String locationInfo) {
+        Map<String, String> map = new HashMap<>();
+        map.put("locationInfo", locationInfo);
+
+        return map;
+    }
 }

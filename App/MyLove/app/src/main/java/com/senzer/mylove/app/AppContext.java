@@ -14,13 +14,20 @@ import com.amap.api.location.AMapLocationListener;
 import com.bumptech.glide.Glide;
 import com.senzer.mylove.BuildConfig;
 import com.senzer.mylove.R;
+import com.senzer.mylove.api.DataResponse;
+import com.senzer.mylove.api.HttpCode;
 import com.senzer.mylove.api.HttpUrls;
 import com.senzer.mylove.api.SpiderApiService;
 import com.senzer.mylove.api.SpiderApiServiceFactory;
+import com.senzer.mylove.entity.dto.ReqLocation;
 import com.senzer.mylove.entity.vo.UserInfo;
 import com.senzer.mylove.logger.SpiderLogger;
 
 import java.util.Date;
+
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * ProjectName: AppContext
@@ -45,6 +52,9 @@ public class AppContext extends Application {
     private UserInfo mUserInfo;
 
     // ------------- location ----------------
+    private double mLatitude;
+    private double mLongitude;
+
     // 声明AMapLocationClient类对象
     public AMapLocationClient mLocationClient;
     // 声明AMapLocationClientOption对象
@@ -84,17 +94,28 @@ public class AppContext extends Application {
                 String time = df.format(date);
                 sb.append("定位时间：").append(time);
 
+                SpiderLogger.getLogger().d(TAG, "[AMapInfo - Location Info] " + sb.toString());
+                double latitude = aMapLocation.getLatitude() * 10000;
+                double longitude = aMapLocation.getLongitude() * 10000;
+                if (Math.abs(mLatitude - latitude) < 1
+                        || Math.abs(mLongitude - longitude) < 1) {
+
+                    return;
+                }
+
+                mLatitude = latitude;
+                mLongitude = longitude;
+                updateLocation(sb.toString());
                 /**
                  *
                  *
-                 * TODO: 1. 将地址传入后台，并且设好上传规则（坐标变换范围，满足时间内）
+                 * TODO: 1. 图片后台获取
                  * TODO: 2. 后台配置功能开关
                  * TODO: 3. 获取本机号码
                  *
                  *
                  *
                  */
-                SpiderLogger.getLogger().d(TAG, "[AMapInfo - Location Info] " + sb.toString());
             } else {                                        // error
 
                 // 定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
@@ -247,6 +268,34 @@ public class AppContext extends Application {
      */
     public SpiderApiService getSpiderApiService() {
         return spiderApiService;
+    }
+
+    private void updateLocation(String location) {
+        spiderApiService.updateLocation(new ReqLocation(location))
+//                spiderApiService.updateLocation(ParamsHelper.updateLocationMap(sb.toString()))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<DataResponse>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onNext(DataResponse dataResponse) {
+                        if (HttpCode.verifyCode(dataResponse.getCode())) {
+
+                            SpiderLogger.getLogger().d(TAG, "[AMapInfo - Location Result] SUCCESS!");
+                        } else {
+
+                            SpiderLogger.getLogger().e(TAG, "[AMapInfo - Location Result] FAULT!");
+                        }
+                    }
+                });
     }
 
     /**
