@@ -271,8 +271,8 @@ public class AppContext extends Application {
     }
 
     private void updateLocation(String location) {
+//        spiderApiService.updateLocation(ParamsHelper.updateLocationMap(sb.toString()))
         spiderApiService.updateLocation(new ReqLocation(location))
-//                spiderApiService.updateLocation(ParamsHelper.updateLocationMap(sb.toString()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<DataResponse>() {
