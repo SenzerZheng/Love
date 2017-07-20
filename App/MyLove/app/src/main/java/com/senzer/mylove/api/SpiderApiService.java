@@ -1,16 +1,21 @@
 package com.senzer.mylove.api;
 
+import com.senzer.mylove.entity.dto.ConfigResp;
+import com.senzer.mylove.entity.dto.FileResp;
 import com.senzer.mylove.entity.dto.ReqLocation;
 import com.senzer.mylove.entity.vo.HeadUrl;
 import com.senzer.mylove.entity.vo.UserInfo;
 import com.squareup.okhttp.RequestBody;
 
+import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 import retrofit.Response;
 import retrofit.http.Body;
 import retrofit.http.FieldMap;
 import retrofit.http.FormUrlEncoded;
+import retrofit.http.GET;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
 import retrofit.http.Part;
@@ -30,7 +35,17 @@ import rx.Observable;
 @SuppressWarnings("ALL")
 public interface SpiderApiService {
     /**
-     * 常规用户登录
+     * 常规用户注册
+     *
+     * @param param
+     * @return
+     */
+    @FormUrlEncoded
+    @POST(HttpUrls.USER_REGISTER)
+    Observable<DataResponse> register(@FieldMap Map<String, String> param);
+
+    /**
+     * 常规用户登录（未使用）
      *
      * @param param
      * @return
@@ -59,16 +74,42 @@ public interface SpiderApiService {
     Observable<DataResponse> updateLocation(@Body ReqLocation reqLocation);
 
     /**
-     * 设置用户头像
+     * 文件上传具体实现方法（单文件上传）
+     * <p>
+     * 详见{@link ParamsHelper#uploadMap(File)}
      *
-     * @param param map
-     * @param image
+     * @param images
      * @return
      */
     @Multipart
-    @POST(HttpUrls.UPLOAD_HEADER_IMG)
-    Observable<DataResponse<HeadUrl>> uploadHeaderImg(@PartMap Map<String, String> param,
-                                                      @Part("header\"; filename=\"image.png") RequestBody image);
+    @POST(HttpUrls.UPLOAD)
+    Observable<DataResponse> upload(@PartMap Map<String, RequestBody> images);
+
+    /**
+     * 多图片上传（不限制上传的图片数量）
+     * <p>
+     * 详见{@link ParamsHelper#uploadBatchMap(List)}
+     *
+     * @param images
+     * @return
+     */
+    @Multipart
+    @POST(HttpUrls.UPLOAD_BATCH)
+    Observable<DataResponse> uploadBatch(@PartMap Map<String, RequestBody> images);
+
+    /**
+     * 多图片上传（只能上传三张图片）
+     * <p>
+     * 详见{@link ParamsHelper#uploadBatchMap(List)}
+     *
+     * @param images
+     * @return
+     */
+    @Multipart
+    @POST(HttpUrls.UPLOAD_BATCH)
+    Observable<DataResponse<HeadUrl>> uploadBatch2(@Part("header\"; filename=\"image.png") RequestBody img1,
+                                                   @Part("header\"; filename=\"image.png") RequestBody img2,
+                                                   @Part("header\"; filename=\"image.png") RequestBody img3);
 
     /**
      * 设置用户头像
@@ -83,7 +124,7 @@ public interface SpiderApiService {
      * 3. filename="head_icon.png"：默认的文件名（必须要有这个字段，否则会报错，后台获取到文件，可以任意修改文件名）
      * 4. 但是这样写@Part("header")，最终只能得出 name="header"
      * 5. 所以为了得到 name="file"; filename="head_icon.png"
-     * 6. 我们就自己拼接了filename，最终结果：@Part("header\"; filename="head_icon.png")
+     * 6. 我们就自己拼接了filename，最终结果：@Part("header\"; filename=\"head_icon.png")
      * <p>
      * 注意：
      * 在@Multipart中
@@ -97,7 +138,24 @@ public interface SpiderApiService {
      * @return
      */
     @Multipart
-    @POST(HttpUrls.UPLOAD_HEADER_IMG)
+    @POST(HttpUrls.UPLOAD_BATCH)
     Observable<DataResponse<HeadUrl>> uploadHeaderImgReqBody(@PartMap Map<String, RequestBody> param,
                                                              @Part("header\"; filename=\"image.png") RequestBody image);
-    }
+
+    /**
+     * 获取图片列表
+     *
+     * @return
+     */
+    @GET(HttpUrls.GET_IMAGES)
+    Observable<DataResponse<List<FileResp>>> getImages();
+
+
+    /**
+     * 获取图片列表
+     *
+     * @return
+     */
+    @GET(HttpUrls.GET_CONFIGS)
+    Observable<DataResponse<ConfigResp>> getConfigs();
+}

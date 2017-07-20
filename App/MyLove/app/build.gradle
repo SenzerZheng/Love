@@ -73,6 +73,16 @@ android {
             signingConfig signingConfigs.debug
         }
 
+        debugRel {
+            minifyEnabled false
+            zipAlignEnabled false
+            debuggable true
+
+            // 移除无用的resource文件
+            shrinkResources false
+            signingConfig signingConfigs.debug
+        }
+
         release {
             // 是否混淆
             minifyEnabled true

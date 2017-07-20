@@ -108,12 +108,22 @@ public class PermissionDetector {
     public static final int REQUEST_LOCATION = 0x008;
     private static String[] PERMISSIONS_LOCATION = {
             Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION};
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.LOCATION_HARDWARE};
 
     // Microphone Permissions
     public static final int REQUEST_MICROPHONE = 0x009;
     private static String[] PERMISSIONS_MICROPHONE = {
             Manifest.permission.RECORD_AUDIO};
+
+    // Storage, Phone Permissions
+    public static final int REQUEST_MULTI_PMSNS_TYPE_ONE = 0x010;
+    private static String[] PERMISSIONS_MULTI_TYPE_ONE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.CALL_PHONE};
+
 
     /**
      * Checks if the app has permission to write to device storage
@@ -213,11 +223,40 @@ public class PermissionDetector {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             // Check if we have write permission
             int permission = ActivityCompat.checkSelfPermission(activity,
-                    Manifest.permission.LOCATION_HARDWARE);
+                    Manifest.permission.ACCESS_FINE_LOCATION);
 
             if (permission != PackageManager.PERMISSION_GRANTED) {
                 // We don't have permission so prompt the user
                 ActivityCompat.requestPermissions(activity, PERMISSIONS_LOCATION, REQUEST_LOCATION);
+
+                isPassed = false;
+            }
+        }
+
+        return isPassed;
+    }
+
+    /**
+     * Checks if the app has permission to storage, phone,
+     * <p>
+     * If the app does not has permission then the user will be prompted to
+     * grant permissions
+     *
+     * @param activity
+     * @return true: granted; false: not granted
+     */
+    public static boolean verifyMultiPmsnsTypeOne(Activity activity) {
+        boolean isPassed = true;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // Check if we have write permission
+            int permission = ActivityCompat.checkSelfPermission(activity,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                // We don't have permission so prompt the user
+                ActivityCompat.requestPermissions(activity,
+                        PERMISSIONS_MULTI_TYPE_ONE, REQUEST_MULTI_PMSNS_TYPE_ONE);
 
                 isPassed = false;
             }

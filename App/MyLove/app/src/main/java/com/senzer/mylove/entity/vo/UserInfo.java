@@ -16,4 +16,9 @@ import lombok.Data;
 @Data
 public class UserInfo implements Serializable {
     private static final long serialVersionUID = 3066452218033074132L;
+    private String mobile;
+
+    public UserInfo(String mobile) {
+        this.mobile = mobile;
+    }
 }

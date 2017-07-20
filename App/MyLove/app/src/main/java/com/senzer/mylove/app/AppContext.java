@@ -106,16 +106,6 @@ public class AppContext extends Application {
                 mLatitude = latitude;
                 mLongitude = longitude;
                 updateLocation(sb.toString());
-                /**
-                 *
-                 *
-                 * TODO: 1. 图片后台获取
-                 * TODO: 2. 后台配置功能开关
-                 * TODO: 3. 获取本机号码
-                 *
-                 *
-                 *
-                 */
             } else {                                        // error
 
                 // 定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。

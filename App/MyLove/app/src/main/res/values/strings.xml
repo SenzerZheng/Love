@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">xx专属</string>
+    <string name="app_name">美洋专属</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">用户名</string>
@@ -14,6 +14,6 @@
         completions."
     </string>
 
-    <string name="name">xxx</string>
-    <string name="pwd">888888</string>
+    <string name="name">刘美洋</string>
+    <string name="pwd">ILoveYou</string>
 </resources>

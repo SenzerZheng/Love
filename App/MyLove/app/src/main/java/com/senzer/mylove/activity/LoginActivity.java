@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        populateAutoComplete();
+//        populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -108,17 +108,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     return;
                 }
 
-                if (!name.equals(email)) {
+                if (!name.equalsIgnoreCase(email)) {
                     ToastHelper.toast(LoginActivity.this, "无此用户！");
                     return;
                 }
 
-                if (!pwd.equals(password)) {
+                if (!pwd.equalsIgnoreCase(password)) {
                     ToastHelper.toast(LoginActivity.this, "密码错误！");
                     return;
                 }
 
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                finish();
             }
         });
 

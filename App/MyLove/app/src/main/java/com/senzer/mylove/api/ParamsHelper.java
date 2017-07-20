@@ -4,6 +4,7 @@ import android.util.Base64;
 
 import com.senzer.mylove.app.AppContext;
 import com.senzer.mylove.entity.dto.ReqBase;
+import com.senzer.mylove.entity.vo.UserInfo;
 import com.senzer.mylove.logger.SpiderLogger;
 import com.senzer.mylove.util.AppInfoHelper;
 import com.senzer.mylove.util.ClassInfoUtils;
@@ -12,9 +13,11 @@ import com.senzer.mylove.util.StringUtil;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -264,36 +267,71 @@ public class ParamsHelper {
     // ----------------------- 通用方法 END ------------------------
 
     // ---------------------- 接口文档 - 请求参数 ------------------
-
     /**
-     * 上传头像Map - 方式一（推荐）
+     * 获取定位信息
      *
-     * @param userId
-     * @param mobile
-     * @param verifyCode 验证码
+     * @param locationInfo
      * @return
      */
-    public static Map<String, RequestBody> uploadHeaderImgReqBody(String userId) {
-        // for signing
-        Map<String, String> mapSign = new HashMap<>();
-        initCommonMap(mapSign);
+    public static Map<String, String> registerMap(UserInfo uInfo) {
+        Map<String, String> map = new HashMap<>();
+        map.put("mobile", uInfo.getMobile());
 
-        mapSign.put("userId", userId);
-
-        // for params
-        Map<String, RequestBody> map = new HashMap<>();
-        initCommonMapReqBody(map);
-
-        map.put("userId", RequestBody.create(MediaType.parse("text/plain"), userId));
-
-        map.put(SIGN, RequestBody.create(MediaType.parse("text/plain"), getInterfSign(mapSign)));
         return map;
     }
 
+    /**
+     * 获取定位信息
+     *
+     * @param locationInfo
+     * @return
+     */
     public static Map<String, String> updateLocationMap(String locationInfo) {
         Map<String, String> map = new HashMap<>();
         map.put("locationInfo", locationInfo);
 
+        return map;
+    }
+
+    /**
+     * 文件上传具体实现方法（单文件上传）
+     *
+     * @param file
+     * @return
+     */
+    public static Map<String, RequestBody> uploadMap(File file) {
+        Map<String, RequestBody> map = new HashMap<>();
+
+        String fileKey = "image\"; filename=\"" + file.getName() + "\"";
+        RequestBody reqBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        map.put(fileKey, reqBody);
+        return map;
+    }
+
+    /**
+     * 批量上传图片
+     *
+     * @param files
+     * @return
+     */
+    public static Map<String, RequestBody> uploadBatchMap(List<File> files) {
+        Map<String, RequestBody> map = new HashMap<>();
+
+        /** way one, apotic name and floating filename */
+        for (File file : files) {
+            String fileKey = "images\"; filename=\"" + file.getName() + "\"";
+            RequestBody reqBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+//            RequestBody reqBody = RequestBody.create(MediaType.parse("image/png"), file);
+            map.put(fileKey, reqBody);
+        }
+
+        /** way two, floating name and floating filename */
+//        int index = 0;
+//        for (File file : files) {
+//            String fileKey = "image" + index + "\"; filename=\"" + file.getName() + "\"";
+//            RequestBody reqBody = RequestBody.create(MediaType.parse("image/png"), file);
+//            map.put(fileKey, reqBody);
+//        }
         return map;
     }
 }
