@@ -41,7 +41,7 @@
                     android:hint="@string/prompt_email"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:text="@string/name" />
+                    tools:text="@string/name" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -60,7 +60,7 @@
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:text="@string/pwd" />
+                    tools:text="@string/pwd" />
 
             </android.support.design.widget.TextInputLayout>
 
